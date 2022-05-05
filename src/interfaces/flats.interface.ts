@@ -7,7 +7,7 @@ export interface IFlats {
 // Брендирование
 export type IFlatId = IBrand<string, "flatId">;
 
-interface IFlat {
+export interface IFlat {
   id: IFlatId;
   cost: number;
   type: "Нежилые помещения" | "Квартира" | "Паркинг";

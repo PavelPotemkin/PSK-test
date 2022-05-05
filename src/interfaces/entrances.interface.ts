@@ -7,7 +7,7 @@ export type IEntrances = IEntrance[];
 // Брендирование
 export type IEntranceId = IBrand<string, "entranceId">;
 
-interface IEntrance {
+export interface IEntrance {
   id: IEntranceId;
   house_id: IHouseId;
   title: string;
