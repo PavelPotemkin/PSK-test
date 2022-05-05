@@ -1,1 +1,1 @@
-export type Brand<T, B extends string> = T & { readonly _brand: B };
+export type IBrand<T, B extends string> = T & { readonly _brand: B };

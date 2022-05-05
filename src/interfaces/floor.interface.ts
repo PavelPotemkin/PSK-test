@@ -1,9 +1,9 @@
-import { FlatId } from "./flats.interface";
+import { IFlatId } from "./flats.interface";
 
-export interface Floor {
+export interface IFloor {
   floor: number;
   flats: {
-    id: FlatId;
+    id: IFlatId;
     number: number;
   }[];
 }

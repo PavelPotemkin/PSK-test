@@ -1,20 +1,20 @@
-import { Brand } from "./helpers/brand.interface";
+import { IBrand } from "./helpers/brand.interface";
 
-export interface Flats {
-  [key: FlatId]: Flat;
+export interface IFlats {
+  [key: IFlatId]: IFlat;
 }
 
 // Брендирование
-export type FlatId = Brand<string, "flatId">;
+export type IFlatId = IBrand<string, "flatId">;
 
-interface Flat {
+interface IFlat {
+  id: IFlatId;
   cost: number;
   type: "Нежилые помещения" | "Квартира" | "Паркинг";
   floor: number;
   number: string;
   square: number;
   status: "Договор" | "Выданы ключи" | "Бронь";
-  id: "1a40a8bd-935c-11e9-a548-00155d015d00";
   subsidy: boolean;
   marginal: boolean;
   renovation: boolean;

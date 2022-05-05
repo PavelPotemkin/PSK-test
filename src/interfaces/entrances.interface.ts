@@ -1,15 +1,15 @@
-import { HouseId } from "./houses.interface";
-import { Floor } from "./floor.interface";
-import { Brand } from "./helpers/brand.interface";
+import { IHouseId } from "./houses.interface";
+import { IFloor } from "./floor.interface";
+import { IBrand } from "./helpers/brand.interface";
 
-export type Entrances = Entrance[];
+export type IEntrances = IEntrance[];
 
 // Брендирование
-export type EntranceId = Brand<string, "entranceId">;
+export type IEntranceId = IBrand<string, "entranceId">;
 
-interface Entrance {
-  id: EntranceId;
-  house_id: HouseId;
+interface IEntrance {
+  id: IEntranceId;
+  house_id: IHouseId;
   title: string;
-  floors: Floor[];
+  floors: IFloor[];
 }

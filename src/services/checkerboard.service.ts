@@ -1,8 +1,8 @@
 import { ApiService } from "@/services/api.service";
-import { Checkerboard } from "@/interfaces/checkboard.interface";
+import { ICheckerboard } from "@/interfaces/checkerboard.interface";
 
 export class CheckerboardService {
   static async getAll() {
-    return ApiService.get<Checkerboard>("/data.json");
+    return ApiService.get<ICheckerboard>("/data.json");
   }
 }
