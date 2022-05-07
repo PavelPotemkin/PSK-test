@@ -22,9 +22,6 @@ const classObj = computed(() => ({
   flat_installment: flat.installment,
 }));
 
-const isShowTriangle =
-  flat.installment || flat.renovation || flat.marginal || flat.subsidy;
-
 let timer: number | undefined;
 
 const showTooltip = (el: HTMLElement, flat: IFlat) => {
@@ -79,7 +76,10 @@ const onFocusEnter = (flat: IFlat) => {
     >
       {{ flat.plan_type }}
 
-      <div v-if="isShowTriangle" class="flat__triangle"></div>
+      <div v-if="flat.subsidy" class="flat__triangle_subsidy"></div>
+      <div v-if="flat.marginal" class="flat__triangle_marginal"></div>
+      <div v-if="flat.renovation" class="flat__triangle_renovation"></div>
+      <div v-if="flat.installment" class="flat__triangle_installment"></div>
     </div>
 
     <div v-else-if="flat.type === 'Нежилые помещения'" class="flat_empty"></div>
@@ -117,20 +117,48 @@ const onFocusEnter = (flat: IFlat) => {
     }
   }
 
-  &_subsidy .flat__triangle {
-    border-color: transparent red transparent transparent;
+  &__triangle_subsidy {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 0.7em 0.7em;
+    border-color: transparent transparent purple transparent;
   }
 
-  &_marginal .flat__triangle {
-    border-color: transparent purple transparent transparent;
+  &__triangle_marginal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0.7em 0 0 0.7em;
+    border-color: transparent transparent transparent blue;
   }
 
-  &_renovation .flat__triangle {
-    border-color: transparent brown transparent transparent;
+  &__triangle_renovation {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0.7em 0.7em 0;
+    border-color: transparent green transparent transparent;
   }
 
-  &_installment .flat__triangle {
-    border-color: transparent khaki transparent transparent;
+  &__triangle_installment {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0.7em 0.7em 0 0;
+    border-color: khaki transparent transparent transparent;
   }
 
   &_focusable {
@@ -139,16 +167,6 @@ const onFocusEnter = (flat: IFlat) => {
       transform: scale(1.1);
       cursor: pointer;
     }
-  }
-
-  &__triangle {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 0.7em 0.7em 0;
   }
 }
 </style>
