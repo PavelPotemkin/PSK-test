@@ -15,7 +15,7 @@ export const useStore = defineStore("main", {
       houses: [] as IHouses,
       entrances: [] as IEntrances,
       tooltip: {} as ITooltip,
-      selectedFlatId: null as IFlatId | null,
+      currentFlatId: null as IFlatId | null,
     };
   },
   getters: {
@@ -52,6 +52,9 @@ export const useStore = defineStore("main", {
     },
     setTooltipData(data: ITooltip) {
       this.tooltip = data;
+    },
+    changeCurrentFlatId(flatId: IFlatId | null) {
+      this.currentFlatId = flatId;
     },
   },
 });

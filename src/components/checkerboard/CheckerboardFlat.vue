@@ -27,21 +27,21 @@ const isShowTriangle =
 
 let timer: number | undefined;
 
-const onFocus = (el: HTMLElement, flat: IFlat) => {
+const showTooltip = (el: HTMLElement, flat: IFlat) => {
   timer = setTimeout(() => {
     const { top, left } = offset(el);
     store.setTooltipData({
       isShow: true,
-      text: flat.type,
+      text: `Тип: ${flat.type}; Статус: ${flat.status}`,
       position: {
         top: top + el.offsetHeight + 2,
         left,
       },
     });
-  }, 500);
+  }, 300);
 };
 
-const onBlur = () => {
+const hideTooltip = () => {
   clearTimeout(timer);
   store.setTooltipData({
     isShow: false,
@@ -55,35 +55,33 @@ function offset(el: HTMLElement) {
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 }
 
-const onFocusEnter = () => {
-  console.log("onFocusEnter");
+const onFocusEnter = (flat: IFlat) => {
+  store.changeCurrentFlatId(flat.id);
 };
 </script>
 
 <template>
-  <CheckerboardCeil>
+  <CheckerboardCeil
+    @mouseenter="showTooltip($el, flat)"
+    @mouseleave="hideTooltip"
+    @focus="showTooltip($el, flat)"
+    @blur="hideTooltip"
+    @keydown.enter="onFocusEnter(flat)"
+    @click="onFocusEnter(flat)"
+    tabindex="0"
+    class="flat_focusable"
+  >
     <div
       v-if="flat.type === 'Квартира'"
-      class="flat_room flat_focusable body-1 text-white"
+      class="flat_room body-1 text-white"
       :class="classObj"
-      @focus="onFocus($el, flat)"
-      @blur="onBlur"
-      @keydown.enter="onFocusEnter"
-      tabindex="0"
     >
       {{ flat.plan_type }}
 
       <div v-if="isShowTriangle" class="flat__triangle"></div>
     </div>
 
-    <div
-      v-else-if="flat.type === 'Нежилые помещения'"
-      class="flat_empty flat_focusable"
-      @focus="onFocus($el, flat)"
-      @blur="onBlur"
-      @keydown.enter="onFocusEnter"
-      tabindex="0"
-    ></div>
+    <div v-else-if="flat.type === 'Нежилые помещения'" class="flat_empty"></div>
   </CheckerboardCeil>
 </template>
 

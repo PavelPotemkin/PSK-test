@@ -1,25 +1,46 @@
 <script setup lang="ts">
 import UiSvgIcon from "@/ui/UiSvgIcon.vue";
+import { nextTick, ref, watch } from "vue";
 
-defineProps<{
+const props = defineProps<{
   modelValue: boolean;
 }>();
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "close"]);
+
+const element = ref<HTMLElement | null>(null);
+
+watch(
+  () => props.modelValue,
+  (value) => {
+    nextTick(() => {
+      if (value) {
+        element.value && element.value.focus();
+      }
+    });
+  }
+);
 
 const closeModal = () => {
+  emit("close", false);
   emit("update:modelValue", false);
 };
 </script>
 
 <template>
   <div v-if="modelValue" class="ui-modal" @click="closeModal">
-    <div class="ui-modal__content" @click.stop>
+    <div ref="element" class="ui-modal__content" tabindex="0" @click.stop>
       <div class="ui-modal__inner">
         <slot v-bind="{ closeModal }" />
       </div>
 
-      <UiSvgIcon class="ui-modal__icon" iconName="close" @click="closeModal" />
+      <UiSvgIcon
+        class="ui-modal__icon"
+        iconName="close"
+        @click="closeModal"
+        tabindex="0"
+        @keydown.enter="closeModal"
+      />
     </div>
   </div>
 </template>
@@ -36,6 +57,7 @@ const closeModal = () => {
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  z-index: 9999;
 
   &__content {
     position: relative;
@@ -44,6 +66,7 @@ const closeModal = () => {
     padding: 1em;
     background-color: lightgrey;
     cursor: default;
+    outline: none;
   }
 
   &__icon {
