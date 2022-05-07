@@ -61,9 +61,7 @@ const closeModal = () => {
 
   &__content {
     position: relative;
-    min-width: 400px;
-    min-height: min(80vh, 200px);
-    padding: 1em;
+    padding: 1em 3em 1em 1em;
     background-color: lightgrey;
     cursor: default;
     outline: none;

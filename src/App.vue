@@ -13,7 +13,17 @@ import FlatDetail from "@/components/FlatDetail.vue";
 const store = useStore();
 const { error, fetchData, isLoading } = useLoading(store.fetchCheckerboard);
 
-onMounted(() => fetchData());
+onMounted(async () => {
+  await fetchData();
+
+  const flatId = new URL(window.location.href).searchParams.get("flat-id");
+
+  if (!flatId) {
+    return;
+  }
+
+  store.changeCurrentFlatId(flatId as IFlatId);
+});
 
 const groupedEntrances = computed(() => store.groupedEntrances);
 
