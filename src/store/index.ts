@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
-import { IFlats } from "@/interfaces/flats.interface";
+import { IFlatId, IFlats } from "@/interfaces/flats.interface";
 import { IHouses } from "@/interfaces/houses.interface";
 import {
   IGroupedEntrancesAcc,
   IEntrances,
 } from "@/interfaces/entrances.interface";
 import { CheckerboardService } from "@/services/checkerboard.service";
+import { ITooltip } from "@/interfaces/tooltip.interface";
 
 export const useStore = defineStore("main", {
   state: () => {
@@ -13,6 +14,8 @@ export const useStore = defineStore("main", {
       flats: {} as IFlats,
       houses: [] as IHouses,
       entrances: [] as IEntrances,
+      tooltip: {} as ITooltip,
+      selectedFlatId: null as IFlatId | null,
     };
   },
   getters: {
@@ -37,7 +40,7 @@ export const useStore = defineStore("main", {
     },
   },
   actions: {
-    async fetchData() {
+    async fetchCheckerboard() {
       try {
         const { flats, houses, entrances } = await CheckerboardService.getAll();
         this.flats = flats;
@@ -45,8 +48,10 @@ export const useStore = defineStore("main", {
         this.entrances = entrances;
       } catch (error) {
         console.log(error);
-        return error;
       }
+    },
+    setTooltipData(data: ITooltip) {
+      this.tooltip = data;
     },
   },
 });
