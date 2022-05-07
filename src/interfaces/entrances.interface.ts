@@ -13,3 +13,7 @@ export interface IEntrance {
   title: string;
   floors: IFloor[];
 }
+
+export interface IGroupedEntrancesAcc {
+  [key: IEntrance["house_id"]]: IEntrance[];
+}
