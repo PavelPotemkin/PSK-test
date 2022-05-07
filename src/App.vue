@@ -1,63 +1,71 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { useStore } from "@/store";
-import CheckerboardItem from "@/components/checkerboard/CheckerboardItem.vue";
 import { useLoading } from "@/hooks/useLoading";
 import UiLoader from "@/ui/UiLoader.vue";
 import UiModal from "@/ui/UiModal.vue";
 import { useSwitcher } from "@/hooks/useSwitcher";
-import { ICheckerboard } from "@/interfaces/checkerboard.interface";
+import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHousesList.vue";
+import { computed, onMounted } from "vue";
+import UiTooltip from "@/ui/UiTooltip.vue";
+import { ITooltip } from "@/interfaces/tooltip.interface";
 
 const store = useStore();
+const { error, fetchData, isLoading } = useLoading(store.fetchCheckerboard);
 
-// Чтобы искуственно замедлить загрузку для тестового показа лоадера
-const longLoadedFetchData = async () => {
-  await Promise.all([
-    store.fetchData(),
-    new Promise((resolve) => setTimeout(() => resolve(""), 1000)),
-  ]);
-};
+onMounted(() => fetchData());
 
-const { error, fetchData, isLoading } = useLoading(longLoadedFetchData);
-fetchData();
+const groupedEntrances = computed(() => store.groupedEntrances);
 
-const checkerboard = computed<ICheckerboard>(() => ({
-  flats: store.flats,
-  houses: store.houses,
-  entrances: store.entrances,
-}));
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { isShow: isModalShow, show: showModal } = useSwitcher();
 
-const { isShow: isModalShow, show: showModal, hide: hideModal } = useSwitcher();
+const tooltipData = computed<ITooltip>(() => store.tooltip);
+
+const tooltipStyle = computed(() =>
+  tooltipData.value.isShow
+    ? {
+        top: tooltipData.value.position.top + "px",
+        left: tooltipData.value.position.left + "px",
+      }
+    : false
+);
 </script>
 
 <template>
-  <button @click="showModal">showModal</button>
-
-  <button @click="hideModal">hideModal</button>
-
-  <UiModal v-model="isModalShow"> hello </UiModal>
+  <UiTooltip v-if="tooltipData.isShow" class="tooltip" :style="tooltipStyle">
+    {{ tooltipData.text }}
+  </UiTooltip>
 
   <div v-if="error">
     {{ error }}
   </div>
+
   <div v-else-if="isLoading" class="loader">
     <UiLoader />
   </div>
-  <div v-else>
-    <CheckerboardItem
-      v-for="entrance in checkerboard.entrances"
-      :key="entrance.id"
-      :entrance="entrance"
-    />
+
+  <div class="checkerboard" v-else>
+    <CheckerboardHousesList :houses="groupedEntrances" />
   </div>
+
+  <UiModal v-model="isModalShow"> hello </UiModal>
 </template>
 
 <style scoped>
+.checkerboard {
+  padding: 3em;
+}
+
 .loader {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5em;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: 999;
 }
 </style>
