@@ -1,7 +1,3 @@
-<script setup lang="ts">
-console.log("tooltip");
-</script>
-
 <template>
   <div class="ui-tooltip">
     <slot />

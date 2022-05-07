@@ -8,6 +8,7 @@ import { computed, onMounted } from "vue";
 import UiTooltip from "@/ui/UiTooltip.vue";
 import { ITooltip } from "@/interfaces/tooltip.interface";
 import { IFlatId } from "@/interfaces/flats.interface";
+import FlatDetail from "@/components/FlatDetail.vue";
 
 const store = useStore();
 const { error, fetchData, isLoading } = useLoading(store.fetchCheckerboard);
@@ -38,7 +39,7 @@ const tooltipStyle = computed(() =>
   </UiTooltip>
 
   <UiModal :model-value="isShowSelectedFlat" @close="closeSelectedFlat">
-    {{ selectedFlatId }}
+    <FlatDetail :flat-id="selectedFlatId" />
   </UiModal>
 
   <div v-if="error">

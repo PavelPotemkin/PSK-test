@@ -57,6 +57,7 @@ function offset(el: HTMLElement) {
 
 const onFocusEnter = (flat: IFlat) => {
   store.changeCurrentFlatId(flat.id);
+  hideTooltip();
 };
 </script>
 
