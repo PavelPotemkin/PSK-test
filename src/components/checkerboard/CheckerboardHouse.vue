@@ -14,9 +14,9 @@ const maxFloorCount = Math.max(
 
 <template>
   <div class="house">
-    <div class="house__floor-numbers">
+    <ul class="house__floor-numbers">
       <CheckerboardFloorNumbers :count="maxFloorCount" />
-    </div>
+    </ul>
 
     <div class="house__floors" v-for="entrance in entrances" :key="entrance.id">
       <CheckerboardEntrance :entrance="entrance" />
@@ -44,6 +44,10 @@ const maxFloorCount = Math.max(
     display: flex;
     flex-direction: column;
     gap: 2em;
+  }
+
+  &__bottom {
+    white-space: nowrap;
   }
 }
 </style>

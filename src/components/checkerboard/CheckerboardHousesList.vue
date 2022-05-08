@@ -20,6 +20,7 @@ defineProps<{
 <style lang="scss" scoped>
 .list {
   display: flex;
+  flex-wrap: wrap;
   align-items: end;
   gap: 4em;
 }

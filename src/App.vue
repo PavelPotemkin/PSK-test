@@ -1,70 +1,37 @@
 <script setup lang="ts">
-import { useStore } from "@/store";
 import { useLoading } from "@/hooks/useLoading";
+import { onMounted } from "vue";
+import { useStore } from "@/store";
 import UiLoader from "@/ui/UiLoader.vue";
-import UiModal from "@/ui/UiModal.vue";
-import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHousesList.vue";
-import { computed, onMounted } from "vue";
-import UiTooltip from "@/ui/UiTooltip.vue";
-import { ITooltip } from "@/interfaces/tooltip.interface";
-import { IFlatId } from "@/interfaces/flats.interface";
-import FlatDetail from "@/components/FlatDetail.vue";
 
 const store = useStore();
 const { error, fetchData, isLoading } = useLoading(store.fetchCheckerboard);
 
 onMounted(async () => {
   await fetchData();
-
-  const flatId = new URL(window.location.href).searchParams.get("flat-id");
-
-  if (!flatId) {
-    return;
-  }
-
-  store.changeCurrentFlatId(flatId as IFlatId);
 });
-
-const groupedEntrances = computed(() => store.groupedEntrances);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const selectedFlatId = computed<IFlatId | null>(() => store.currentFlatId);
-const isShowSelectedFlat = computed<boolean>(() => !!store.currentFlatId);
-const closeSelectedFlat = () => store.changeCurrentFlatId(null);
-
-const tooltipData = computed<ITooltip>(() => store.tooltip);
-const tooltipStyle = computed(() =>
-  tooltipData.value.isShow
-    ? {
-        top: tooltipData.value.position.top + "px",
-        left: tooltipData.value.position.left + "px",
-      }
-    : false
-);
 </script>
 
 <template>
-  <UiTooltip v-if="tooltipData.isShow" class="tooltip" :style="tooltipStyle">
-    {{ tooltipData.text }}
-  </UiTooltip>
-
-  <UiModal :model-value="isShowSelectedFlat" @close="closeSelectedFlat">
-    <FlatDetail :flat-id="selectedFlatId" />
-  </UiModal>
-
   <div v-if="error">
     {{ error }}
   </div>
+
   <div v-else-if="isLoading" class="loader">
     <UiLoader />
   </div>
-  <div class="checkerboard" v-else>
-    <CheckerboardHousesList :houses="groupedEntrances" />
-  </div>
+
+  <main class="main" v-else>
+    <RouterView />
+  </main>
 </template>
 
+<style scoped></style>
+
 <style scoped>
-.checkerboard {
+.main {
+  max-width: 1440px;
+  margin: auto;
   padding: 3em;
 }
 
@@ -74,10 +41,5 @@ const tooltipStyle = computed(() =>
   align-items: center;
   justify-content: center;
   font-size: 1.5em;
-}
-
-.tooltip {
-  position: absolute;
-  z-index: 999;
 }
 </style>
