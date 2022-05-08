@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import { IFloor } from "@/interfaces/floor.interface";
 import CheckerboardFlat from "@/components/checkerboard/CheckerboardFlat.vue";
+import { useStore } from "@/store";
+import { IFlat } from "@/interfaces/flats.interface";
 
 defineProps<{
   floor: IFloor;
 }>();
+
+const store = useStore();
+const flats = store.flats;
+
+const openFlat = (flat: IFlat) => {
+  store.changeCurrentFlatId(flat.id);
+};
 </script>
 
 <template>
@@ -13,7 +22,8 @@ defineProps<{
       class="floor__item"
       v-for="flat in floor.flats"
       :key="flat.id"
-      :flat-id="flat.id"
+      :flat="flats[flat.id]"
+      @open="openFlat"
     />
   </ul>
 </template>

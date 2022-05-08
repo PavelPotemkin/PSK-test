@@ -3,6 +3,8 @@ import { IFlat, IFlatId } from "@/interfaces/flats.interface";
 import { useStore } from "@/store";
 import getNameOfRoomPlanType from "@/helpers/getNameOfRoomPlanType";
 import constants from "@/lib/constants";
+import numberWithSpaces from "@/helpers/numberWithSpaces";
+import getBooleanValueCorrectText from "@/helpers/getBooleanValueCorrectText";
 
 const props = defineProps<{
   flatId: IFlatId;
@@ -11,8 +13,10 @@ const store = useStore();
 
 const flat: IFlat = store.flats[props.flatId];
 const getNameOfRoomPlanTypeFn = getNameOfRoomPlanType;
-const getBooleanValueCorrectText = (value: boolean) => (value ? "Да" : "Нет");
 const AREA_UNIT_SQUARE = constants.AREA_UNIT_SQUARE;
+const PRICE_VALUE = constants.PRICE_VALUE;
+const costWithSpaces = numberWithSpaces(flat.cost);
+const getBooleanValueCorrectTextFn = getBooleanValueCorrectText;
 </script>
 
 <template>
@@ -21,16 +25,21 @@ const AREA_UNIT_SQUARE = constants.AREA_UNIT_SQUARE;
     <span> Тип: {{ flat.type }} </span>
     <span> Статус: {{ flat.status }} </span>
     <span>
-      Субсидированная: {{ getBooleanValueCorrectText(flat.subsidy) }}
+      Субсидированная: {{ getBooleanValueCorrectTextFn(flat.subsidy) }}
     </span>
-    <span> Маржинальная: {{ getBooleanValueCorrectText(flat.marginal) }} </span>
-    <span> С ремонтом: {{ getBooleanValueCorrectText(flat.renovation) }} </span>
     <span>
-      С рассрочкой: {{ getBooleanValueCorrectText(flat.installment) }}
+      Маржинальная: {{ getBooleanValueCorrectTextFn(flat.marginal) }}
+    </span>
+    <span>
+      С ремонтом: {{ getBooleanValueCorrectTextFn(flat.renovation) }}
+    </span>
+    <span>
+      С рассрочкой: {{ getBooleanValueCorrectTextFn(flat.installment) }}
     </span>
     <span> Номер этажа: {{ flat.floor }} </span>
     <span> Номер: {{ flat.number }} </span>
     <span> Площадь: {{ flat.square }} {{ AREA_UNIT_SQUARE }} </span>
+    <span> Стоимость: {{ costWithSpaces }} {{ PRICE_VALUE }} </span>
   </div>
 </template>
 

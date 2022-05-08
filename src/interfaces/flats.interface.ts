@@ -14,7 +14,7 @@ export interface IFlat {
   floor: number;
   number: string;
   square: number;
-  status: "Договор" | "Выданы ключи" | "Бронь";
+  status: "Выданы ключи" | "Договор" | "Бронь" | "Оформление" | "Свободна";
   subsidy: boolean;
   marginal: boolean;
   renovation: boolean;

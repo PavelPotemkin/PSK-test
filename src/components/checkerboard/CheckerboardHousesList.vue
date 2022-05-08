@@ -21,7 +21,7 @@ defineProps<{
 .list {
   display: flex;
   flex-wrap: wrap;
-  align-items: end;
+  align-items: flex-end;
   gap: 4em;
 }
 </style>

@@ -10,6 +10,7 @@ import { useSwitcher } from "@/hooks/useSwitcher";
 import UiSvgIcon from "@/ui/UiSvgIcon.vue";
 import { useRouter } from "vue-router";
 import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHousesList.vue";
+import LegendTable from "@/components/LegendTable.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -61,6 +62,8 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
 </script>
 
 <template>
+  <LegendTable />
+
   <CheckerboardHousesList :houses="groupedEntrances" />
 
   <UiTooltip v-if="tooltipData.isShow" class="tooltip" :style="tooltipStyle">

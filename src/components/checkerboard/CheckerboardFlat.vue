@@ -1,19 +1,22 @@
 <script setup lang="ts">
-import { IFlat, IFlatId } from "@/interfaces/flats.interface";
+import { IFlat } from "@/interfaces/flats.interface";
 import { useStore } from "@/store";
 import CheckerboardCeil from "@/components/checkerboard/CheckerboardCeil.vue";
 import { computed } from "vue";
 
 const store = useStore();
 const props = defineProps<{
-  flatId: IFlatId;
+  flat: IFlat;
   disabled?: boolean;
+  hideTooltip?: boolean;
 }>();
+
+const emit = defineEmits(["open"]);
 
 let timer: number | undefined;
 
 const showTooltip = (el: HTMLElement, flat: IFlat) => {
-  if (props.disabled) {
+  if (props.hideTooltip || props.disabled) {
     return;
   }
 
@@ -31,7 +34,7 @@ const showTooltip = (el: HTMLElement, flat: IFlat) => {
 };
 
 const hideTooltip = () => {
-  if (props.disabled) {
+  if (props.hideTooltip || props.disabled) {
     return;
   }
 
@@ -48,32 +51,27 @@ function offset(el: HTMLElement) {
   return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
 }
 
-const onFocusEnter = (flat: IFlat) => {
-  if (props.disabled) {
-    return;
-  }
-
-  store.changeCurrentFlatId(flat.id);
-  hideTooltip();
-};
-
 const classObj = computed(() => ({
   flat_focusable: !props.disabled,
   flat_disabled: props.disabled,
 }));
 
-const flat: IFlat = store.flats[props.flatId];
-
 const classObjInner = computed(() => ({
-  flat_status_booking: flat.status === "Бронь",
-  flat_status_contract: flat.status === "Договор",
-  flat_status_keys: flat.status === "Выданы ключи",
+  flat_status_booking: props.flat.status === "Бронь",
+  flat_status_contract: props.flat.status === "Договор",
+  flat_status_keys: props.flat.status === "Выданы ключи",
+  flat_status_registration: props.flat.status === "Оформление",
+  flat_status_free: props.flat.status === "Свободна",
 
-  flat_subsidy: flat.subsidy,
-  flat_marginal: flat.marginal,
-  flat_renovation: flat.renovation,
-  flat_installment: flat.installment,
+  flat_subsidy: props.flat.subsidy,
+  flat_marginal: props.flat.marginal,
+  flat_renovation: props.flat.renovation,
+  flat_installment: props.flat.installment,
 }));
+
+const emitOpen = () => {
+  emit("open", props.flat);
+};
 </script>
 
 <template>
@@ -82,8 +80,8 @@ const classObjInner = computed(() => ({
     @mouseleave="hideTooltip"
     @focus="showTooltip($el, flat)"
     @blur="hideTooltip"
-    @keydown.enter="onFocusEnter(flat)"
-    @click="onFocusEnter(flat)"
+    @keydown.enter="emitOpen"
+    @click="emitOpen"
     :class="classObj"
     tabindex="0"
   >
@@ -132,6 +130,14 @@ const classObjInner = computed(() => ({
 
     &_keys {
       background-color: green;
+    }
+
+    &_registration {
+      background-color: cornflowerblue;
+    }
+
+    &_free {
+      background-color: deeppink;
     }
   }
 

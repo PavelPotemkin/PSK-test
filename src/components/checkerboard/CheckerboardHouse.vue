@@ -33,11 +33,11 @@ const maxFloorCount = Math.max(
 <style lang="scss" scoped>
 .house {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   gap: 1em;
 
   &__floor-numbers {
-    align-self: start;
+    align-self: flex-start;
   }
 
   &__floors {
