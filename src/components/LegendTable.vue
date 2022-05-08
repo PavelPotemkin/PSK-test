@@ -5,19 +5,17 @@ import { IFlat, IFlatId } from "@/interfaces/flats.interface";
 import CheckerboardFlat from "@/components/checkerboard/CheckerboardFlat.vue";
 import { useStore } from "@/store";
 import getBooleanValueCorrectText from "@/helpers/getBooleanValueCorrectText";
+import { computed, ref } from "vue";
+import UiLoader from "@/ui/UiLoader.vue";
 
-const {
-  isShow: isLegendShow,
-  // hide: hideLegend,
-  show: showLegend,
-} = useSwitcher();
+const { isShow: isLegendShow, show: showLegend } = useSwitcher();
 
 const store = useStore();
 
 const flatsOptionsMap = new Map<keyof IFlat, Set<IFlat[keyof IFlat]>>();
 
 const optionsDescription: {
-  [key in keyof IFlat]: string;
+  [key in keyof Partial<IFlat>]: string;
 } = {
   type: "Тип помещения",
   status: "Статус помещения",
@@ -27,27 +25,7 @@ const optionsDescription: {
   installment: "С рассрочкой",
 };
 
-const whiteListOptions = Object.keys(optionsDescription);
-
-Object.values(store.flats).forEach((flat) => {
-  const flatsKeys = Object.keys(flat);
-  flatsKeys.forEach((flatsKey) => {
-    const key = flatsKey as keyof IFlat;
-
-    // елси ключ не в списке нужных для показа или он falsy - не добавлять его в легенду
-    if (!whiteListOptions.includes(key) || !flat[key]) {
-      return;
-    }
-
-    if (flatsOptionsMap.has(key)) {
-      flatsOptionsMap.get(key)?.add(flat[key]);
-    } else {
-      flatsOptionsMap.set(key, new Set<IFlat[keyof IFlat]>().add(flat[key]));
-    }
-  });
-});
-
-const optionsKeys = Array.from(flatsOptionsMap.keys());
+const optionsKeys = computed(() => Array.from(flatsOptionsMap.keys()));
 
 const baseFlat: IFlat = {
   id: "" as IFlatId,
@@ -67,13 +45,45 @@ const baseFlat: IFlat = {
 };
 
 const getBooleanValueCorrectTextFn = getBooleanValueCorrectText;
+
+const isLegendLoaded = ref(false);
+
+const onLegendShow = () => {
+  showLegend();
+  if (isLegendLoaded.value) {
+    return;
+  }
+
+  const whiteListOptions = Object.keys(optionsDescription);
+
+  Object.values(store.flats).forEach((flat) => {
+    const flatsKeys = Object.keys(flat);
+    flatsKeys.forEach((flatsKey) => {
+      const key = flatsKey as keyof IFlat;
+
+      // елси ключ не в списке нужных для показа или он falsy - не добавлять его в легенду
+      if (!whiteListOptions.includes(key) || !flat[key]) {
+        return;
+      }
+
+      if (flatsOptionsMap.has(key)) {
+        flatsOptionsMap.get(key)?.add(flat[key]);
+      } else {
+        flatsOptionsMap.set(key, new Set<IFlat[keyof IFlat]>().add(flat[key]));
+      }
+    });
+  });
+
+  isLegendLoaded.value = true;
+};
 </script>
 
 <template>
-  <button class="legend-btn" @click="showLegend">Посмотреть легенду</button>
+  <button class="legend-btn" @click="onLegendShow">Посмотреть легенду</button>
 
   <UiModal v-model="isLegendShow">
-    <div class="legend">
+    <UiLoader v-if="!isLegendLoaded" />
+    <div v-else class="legend">
       <div
         v-for="optionKey in optionsKeys"
         :key="optionKey"
