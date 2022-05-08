@@ -8,13 +8,13 @@ defineProps<{
 </script>
 
 <template>
-  <div class="list">
+  <section class="list">
     <CheckerboardHouse
       v-for="house_id of Object.keys(houses)"
       :key="house_id"
       :entrances="houses[house_id]"
     />
-  </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>

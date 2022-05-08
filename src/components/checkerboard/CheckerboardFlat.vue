@@ -7,24 +7,16 @@ import { computed } from "vue";
 const store = useStore();
 const props = defineProps<{
   flatId: IFlatId;
+  disabled?: boolean;
 }>();
-
-const flat: IFlat = store.flats[props.flatId];
-
-const classObj = computed(() => ({
-  flat_status_booking: flat.status === "Бронь",
-  flat_status_contract: flat.status === "Договор",
-  flat_status_keys: flat.status === "Выданы ключи",
-
-  flat_subsidy: flat.subsidy,
-  flat_marginal: flat.marginal,
-  flat_renovation: flat.renovation,
-  flat_installment: flat.installment,
-}));
 
 let timer: number | undefined;
 
 const showTooltip = (el: HTMLElement, flat: IFlat) => {
+  if (props.disabled) {
+    return;
+  }
+
   timer = setTimeout(() => {
     const { top, left } = offset(el);
     store.setTooltipData({
@@ -39,6 +31,10 @@ const showTooltip = (el: HTMLElement, flat: IFlat) => {
 };
 
 const hideTooltip = () => {
+  if (props.disabled) {
+    return;
+  }
+
   clearTimeout(timer);
   store.setTooltipData({
     isShow: false,
@@ -53,9 +49,31 @@ function offset(el: HTMLElement) {
 }
 
 const onFocusEnter = (flat: IFlat) => {
+  if (props.disabled) {
+    return;
+  }
+
   store.changeCurrentFlatId(flat.id);
   hideTooltip();
 };
+
+const classObj = computed(() => ({
+  flat_focusable: !props.disabled,
+  flat_disabled: props.disabled,
+}));
+
+const flat: IFlat = store.flats[props.flatId];
+
+const classObjInner = computed(() => ({
+  flat_status_booking: flat.status === "Бронь",
+  flat_status_contract: flat.status === "Договор",
+  flat_status_keys: flat.status === "Выданы ключи",
+
+  flat_subsidy: flat.subsidy,
+  flat_marginal: flat.marginal,
+  flat_renovation: flat.renovation,
+  flat_installment: flat.installment,
+}));
 </script>
 
 <template>
@@ -66,13 +84,13 @@ const onFocusEnter = (flat: IFlat) => {
     @blur="hideTooltip"
     @keydown.enter="onFocusEnter(flat)"
     @click="onFocusEnter(flat)"
+    :class="classObj"
     tabindex="0"
-    class="flat_focusable"
   >
     <div
       v-if="flat.type === 'Квартира'"
       class="flat_room body-1 text-white"
-      :class="classObj"
+      :class="classObjInner"
     >
       {{ flat.plan_type }}
 
@@ -167,6 +185,10 @@ const onFocusEnter = (flat: IFlat) => {
       transform: scale(1.1);
       cursor: pointer;
     }
+  }
+
+  &_disabled {
+    opacity: 0.4;
   }
 }
 </style>

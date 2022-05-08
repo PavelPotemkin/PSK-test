@@ -35,7 +35,7 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
 
 <template>
   <div class="flat">
-    <span> Планировка: {{ getNameOfRoomPlanTypeFn(flat.plan_type) }} </span>
+    <h2 class="flat__title">{{ getNameOfRoomPlanTypeFn(flat.plan_type) }}</h2>
     <span> Тип: {{ flat.type }} </span>
     <span> Статус: {{ flat.status }} </span>
     <span>
@@ -47,8 +47,8 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
       С рассрочкой: {{ getBooleanValueCorrectText(flat.installment) }}
     </span>
     <span> Номер этажа: {{ flat.floor }} </span>
-    <span> Номер квартиры: {{ flat.number }} </span>
-    <span> Площадь квартиры: {{ flat.square }} {{ AREA_UNIT_SQUARE }} </span>
+    <span> Номер: {{ flat.number }} </span>
+    <span> Площадь: {{ flat.square }} {{ AREA_UNIT_SQUARE }} </span>
 
     <button
       class="flat__room-link"
@@ -76,6 +76,10 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
   flex-direction: column;
   gap: 0.2em;
   font-size: 1.1em;
+
+  &__title {
+    margin-bottom: 0.5em;
+  }
 
   &__room-link {
     display: flex;
