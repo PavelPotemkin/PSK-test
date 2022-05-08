@@ -84,6 +84,8 @@ const onLegendShow = () => {
   <UiModal v-model="isLegendShow">
     <UiLoader v-if="!isLegendLoaded" />
     <div v-else class="legend">
+      <h2>Легенда</h2>
+
       <div
         v-for="optionKey in optionsKeys"
         :key="optionKey"
