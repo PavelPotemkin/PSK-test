@@ -1,17 +1,44 @@
 <script lang="ts" setup>
 import UiSvgIcon from "@/ui/UiSvgIcon.vue";
+import { computed } from "vue";
 
-defineProps<{
-  modelValue: {
-    type: boolean;
-    required: true;
-  };
+const props = defineProps<{
+  modelValue: boolean | string[];
+  value?: string;
 }>();
 
 const emit = defineEmits(["update:modelValue"]);
 
+const items = computed(() => props.modelValue);
+
+const checked = computed<boolean>(() => {
+  if (typeof items.value === "object") {
+    return items.value.includes(props.value || "");
+  } else {
+    return items.value;
+  }
+});
+
 const onChange = (value: boolean) => {
-  emit("update:modelValue", value);
+  if (typeof props.modelValue === "boolean") {
+    emit("update:modelValue", value);
+  } else if (typeof items.value === "object") {
+    if (value) {
+      emit("update:modelValue", [...items.value, props.value]);
+    } else {
+      const index = items.value.indexOf(props.value || "");
+
+      if (index < 0) {
+        return;
+      }
+
+      const changedModelValue = Array.from(items.value);
+
+      changedModelValue.splice(index, 1);
+
+      emit("update:modelValue", changedModelValue);
+    }
+  }
 };
 </script>
 
@@ -20,7 +47,7 @@ const onChange = (value: boolean) => {
     <input
       class="ui-checkbox__input visually-hidden"
       type="checkbox"
-      :checked="modelValue"
+      :checked="checked"
       @change="onChange($event.target.checked)"
     />
 

@@ -85,11 +85,10 @@ $h: 1rem;
   border-radius: 50%;
   background: darkgray;
   pointer-events: auto;
+  cursor: pointer;
 }
 
 .ui-range {
-  width: fit-content;
-
   &__inputs {
     --dif: calc(var(--max) - var(--min));
     display: grid;
@@ -101,7 +100,7 @@ $h: 1rem;
   }
 
   &__bg-line {
-    background: lightgray;
+    background: white;
     height: 4px;
     position: absolute;
     top: 0;

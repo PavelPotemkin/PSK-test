@@ -17,7 +17,7 @@ export const useStore = defineStore("main", {
       entrances: [] as IEntrances,
       tooltip: {} as ITooltip,
       currentFlatId: null as IFlatId | null,
-      filters: {} as IFilters,
+      filters: [] as IFilters,
     };
   },
   getters: {
@@ -47,17 +47,17 @@ export const useStore = defineStore("main", {
         Object.values(this.flats).reduce(
           (acc, flat) => {
             if (!acc.minSquare || flat.square < acc.minSquare) {
-              acc.minSquare = flat.square;
+              acc.minSquare = Math.floor(flat.square);
             }
             if (!acc.maxSquare || flat.square > acc.maxSquare) {
-              acc.maxSquare = flat.square;
+              acc.maxSquare = Math.ceil(flat.square);
             }
 
             if (!acc.minCost || flat.cost < acc.minCost) {
-              acc.minCost = flat.cost;
+              acc.minCost = Math.floor(flat.cost);
             }
             if (!acc.maxCost || flat.cost > acc.maxCost) {
-              acc.maxCost = flat.cost;
+              acc.maxCost = Math.ceil(flat.cost);
             }
 
             if (flat.plan_type && !acc.plan_type.includes(flat.plan_type)) {
@@ -97,7 +97,7 @@ export const useStore = defineStore("main", {
         {
           type: "checkbox",
           code: "plan_type",
-          name: "Статус:",
+          name: "Планировка:",
           items: plan_type,
         },
         {
@@ -117,22 +117,22 @@ export const useStore = defineStore("main", {
         {
           type: "switch",
           code: "subsidy",
-          name: "Субсидированная:",
+          name: "Субсидированная",
         },
         {
           type: "switch",
           code: "marginal",
-          name: "Маржинальная:",
+          name: "Маржинальная",
         },
         {
           type: "switch",
           code: "renovation",
-          name: "С ремонтом:",
+          name: "С ремонтом",
         },
         {
           type: "switch",
           code: "installment",
-          name: "С рассрочкой:",
+          name: "С рассрочкой",
         },
       ];
     },

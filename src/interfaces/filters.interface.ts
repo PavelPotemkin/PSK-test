@@ -22,3 +22,17 @@ type IFilterCheckbox = IFilterBase<"checkbox"> & {
 };
 
 type IFilterSwitch = IFilterBase<"switch">;
+
+export type IFiltersTarget = IFilterTarget[];
+
+type IFilterTarget =
+  | (IFilterCheckbox & {
+      values: string[];
+    })
+  | (IFilterRange & {
+      min: number;
+      max: number;
+    })
+  | (IFilterSwitch & {
+      value: boolean;
+    });

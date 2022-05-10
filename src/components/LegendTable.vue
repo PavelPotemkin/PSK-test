@@ -7,6 +7,7 @@ import getBooleanValueCorrectText from "@/helpers/getBooleanValueCorrectText";
 import { computed, ref } from "vue";
 import UiLoader from "@/ui/UiLoader.vue";
 import CheckerboardFlatDisplay from "@/components/checkerboard/CheckerboardFlatDisplay.vue";
+import UiButton from "@/ui/UiButton.vue";
 
 const { isShow: isLegendShow, show: showLegend } = useSwitcher();
 
@@ -79,50 +80,53 @@ const onLegendShow = () => {
 </script>
 
 <template>
-  <button class="legend-btn" @click="onLegendShow">Посмотреть легенду</button>
+  <UiButton class="legend-btn" @click="onLegendShow">
+    Посмотреть легенду
+  </UiButton>
 
   <UiModal v-model="isLegendShow">
-    <UiLoader v-if="!isLegendLoaded" />
-    <div v-else class="legend">
-      <h2>Легенда</h2>
+    <template v-slot:header> Легенда </template>
 
-      <div
-        v-for="optionKey in optionsKeys"
-        :key="optionKey"
-        class="legend__option"
-      >
-        <h4 class="legend__option-title">
-          {{ optionsDescription[optionKey] }}
-        </h4>
-
+    <template v-slot:default>
+      <UiLoader v-if="!isLegendLoaded" />
+      <div v-else class="legend">
         <div
-          v-for="flatOption in flatsOptionsMap.get(optionKey)"
-          :key="flatOption"
-          class="legend__value"
+          v-for="optionKey in optionsKeys"
+          :key="optionKey"
+          class="legend__option"
         >
-          <CheckerboardFlatDisplay
-            class="legend__flat"
-            :flat="{
-              ...baseFlat,
-              [optionKey]: flatOption,
-            }"
-          />
+          <h4 class="legend__option-title">
+            {{ optionsDescription[optionKey] }}
+          </h4>
 
-          {{
-            typeof flatOption === "boolean"
-              ? getBooleanValueCorrectTextFn(flatOption)
-              : flatOption
-          }}
+          <div
+            v-for="flatOption in flatsOptionsMap.get(optionKey)"
+            :key="flatOption"
+            class="legend__value"
+          >
+            <CheckerboardFlatDisplay
+              class="legend__flat"
+              :flat="{
+                ...baseFlat,
+                [optionKey]: flatOption,
+              }"
+            />
+
+            {{
+              typeof flatOption === "boolean"
+                ? getBooleanValueCorrectTextFn(flatOption)
+                : flatOption
+            }}
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </UiModal>
 </template>
 
 <style lang="scss" scoped>
 .legend-btn {
   margin-bottom: 2em;
-  cursor: pointer;
 }
 
 .legend {
@@ -135,10 +139,6 @@ const onLegendShow = () => {
     display: flex;
     flex-direction: column;
     gap: 1em;
-  }
-
-  &__option-title {
-    //margin-bottom: ;
   }
 
   &__value {

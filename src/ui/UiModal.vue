@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import UiSvgIcon from "@/ui/UiSvgIcon.vue";
-import { nextTick, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 
 const props = defineProps<{
   modelValue: boolean;
+  width?: number;
 }>();
 
 const emit = defineEmits(["update:modelValue", "close"]);
@@ -25,13 +26,29 @@ const closeModal = () => {
   emit("close", false);
   emit("update:modelValue", false);
 };
+
+const styleObj = computed(() => ({
+  width: `${props.width}px`,
+}));
 </script>
 
 <template>
   <div v-if="modelValue" class="ui-modal" @click="closeModal">
-    <div ref="element" class="ui-modal__content" tabindex="0" @click.stop>
+    <div
+      ref="element"
+      class="ui-modal__content"
+      :style="styleObj"
+      tabindex="0"
+      @click.stop
+    >
+      <h2 class="ui-modal__title"><slot name="header" /></h2>
+
       <div class="ui-modal__inner">
-        <slot v-bind="{ closeModal }" />
+        <slot name="default" v-bind="{ closeModal }" />
+      </div>
+
+      <div class="ui-modal__footer">
+        <slot name="footer" />
       </div>
 
       <UiSvgIcon
@@ -59,12 +76,20 @@ const closeModal = () => {
   cursor: pointer;
   z-index: 9999;
 
+  &__title {
+    margin-bottom: 1em;
+  }
+
   &__content {
     position: relative;
     padding: 1em 3em 1em 1em;
     background-color: lightgrey;
     cursor: default;
     outline: none;
+  }
+
+  &__footer {
+    margin-top: 1em;
   }
 
   &__icon {

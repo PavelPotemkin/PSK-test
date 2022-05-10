@@ -8,18 +8,17 @@ import { IFlatId } from "@/interfaces/flats.interface";
 import FlatDetail from "@/components/FlatDetail.vue";
 import { useSwitcher } from "@/hooks/useSwitcher";
 import UiSvgIcon from "@/ui/UiSvgIcon.vue";
-import { useRouter } from "vue-router";
+import { LocationQueryRaw, useRoute, useRouter } from "vue-router";
 import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHousesList.vue";
 import LegendTable from "@/components/LegendTable.vue";
+import { IFiltersTarget } from "@/interfaces/filters.interface";
 import FilterPanel from "@/components/FilterPanel.vue";
-import { IFilters } from "@/interfaces/filters.interface";
 
 const store = useStore();
 const router = useRouter();
 
 const groupedEntrances = computed(() => store.groupedEntrances);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const selectedFlatId = computed<IFlatId | null>(() => store.currentFlatId);
 const isShowSelectedFlat = computed<boolean>(() => !!store.currentFlatId);
 const closeSelectedFlat = () => store.changeCurrentFlatId(null);
@@ -64,11 +63,111 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
 
 store.setFilters();
 
-console.log(store.filters);
+const route = useRoute();
+
+const filters = computed<IFiltersTarget>(() =>
+  store.filters.map((filter) => {
+    switch (filter.type) {
+      case "switch": {
+        return {
+          ...filter,
+          value: Object.prototype.hasOwnProperty.call(route.query, filter.code),
+        };
+      }
+      case "range": {
+        if (
+          Object.prototype.hasOwnProperty.call(route.query, filter.code) &&
+          route.query[filter.code]
+        ) {
+          const [min, max] =
+            decodeURI(route.query[filter.code] as string)?.split(",") || [];
+
+          if (!isNaN(+min) && !isNaN(+max)) {
+            return {
+              ...filter,
+              min: +min,
+              max: +max,
+            };
+          }
+        }
+        return {
+          ...filter,
+          min: filter.minLimit,
+          max: filter.maxLimit,
+        };
+      }
+      case "checkbox": {
+        if (!Object.prototype.hasOwnProperty.call(route.query, filter.code)) {
+          return {
+            ...filter,
+            values: [],
+          };
+        }
+
+        const values = (
+          decodeURI(route.query[filter.code] as string)?.split(",") || []
+        ).filter((item) => filter.items.includes(item));
+
+        return {
+          ...filter,
+          values,
+        };
+      }
+      default: {
+        // В случае добавления нового типа фильтра тут будет ошибка
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const neverFilter: never = filter;
+        return filter;
+      }
+    }
+  })
+);
+
+const getUrlParamsFromFilter = (
+  filtersValues: IFiltersTarget
+): LocationQueryRaw => {
+  const queryObj: {
+    [key: string]: string | null;
+  } = {};
+
+  filtersValues.forEach((filter) => {
+    switch (filter.type) {
+      case "checkbox":
+        if (filter.values.length) {
+          queryObj[filter.code] = encodeURI(filter.values.join(","));
+        }
+        break;
+      case "range":
+        if (
+          filter.min &&
+          filter.max &&
+          (filter.min !== filter.minLimit || filter.max !== filter.maxLimit)
+        ) {
+          queryObj[filter.code] = encodeURI([filter.min, filter.max].join(","));
+        }
+        break;
+      case "switch":
+        if (filter.value) {
+          queryObj[filter.code] = null;
+        }
+        break;
+    }
+  });
+
+  return queryObj;
+};
+
+const onFilterChange = async (value: IFiltersTarget) => {
+  const query = getUrlParamsFromFilter(value);
+  await router.push({ path: route.path, query });
+};
 </script>
 
 <template>
-  <!--  <FilterPanel :filters="filters" />-->
+  <div class="filter-panel">
+    <FilterPanel :filters="filters" @change="onFilterChange" />
+    {{ filters }}
+  </div>
 
   <LegendTable />
 
@@ -117,6 +216,10 @@ console.log(store.filters);
 .tooltip {
   position: absolute;
   z-index: 999;
+}
+
+.filter-panel {
+  margin-bottom: 1em;
 }
 
 .room-links {
