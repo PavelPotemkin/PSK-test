@@ -166,7 +166,6 @@ const onFilterChange = async (value: IFiltersTarget) => {
 <template>
   <div class="filter-panel">
     <FilterPanel :filters="filters" @change="onFilterChange" />
-    {{ filters }}
   </div>
 
   <LegendTable />
