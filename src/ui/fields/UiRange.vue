@@ -3,22 +3,10 @@ import { IRange } from "@/interfaces/fields/range.interface";
 import { ref, watch } from "vue";
 
 const props = defineProps<{
-  min: {
-    type: number;
-    required: true;
-  };
-  max: {
-    type: number;
-    required: true;
-  };
-  minLimit: {
-    type: number;
-    required: true;
-  };
-  maxLimit: {
-    type: number;
-    required: true;
-  };
+  min: number;
+  max: number;
+  minLimit: number;
+  maxLimit: number;
 }>();
 
 const emit = defineEmits<{
@@ -54,6 +42,7 @@ const onChange = () => {
 
 <template>
   <div class="ui-range">
+    <slot />
     <div class="ui-range__inputs">
       <input
         type="range"
