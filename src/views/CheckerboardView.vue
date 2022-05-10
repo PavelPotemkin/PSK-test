@@ -161,11 +161,19 @@ const onFilterChange = async (value: IFiltersTarget) => {
   const query = getUrlParamsFromFilter(value);
   await router.push({ path: route.path, query });
 };
+
+const onFilterReset = () => {
+  router.push({ path: route.path, query: {} });
+};
 </script>
 
 <template>
   <div class="filter-panel">
-    <FilterPanel :filters="filters" @change="onFilterChange" />
+    <FilterPanel
+      :filters="filters"
+      @change="onFilterChange"
+      @reset="onFilterReset"
+    />
   </div>
 
   <LegendTable />

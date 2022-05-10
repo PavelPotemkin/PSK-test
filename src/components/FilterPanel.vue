@@ -14,6 +14,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "change", filters: IFiltersTarget): void;
+  (e: "reset"): void;
 }>();
 
 const filters = reactive(JSON.parse(JSON.stringify(props.filters)));
@@ -29,10 +30,9 @@ const { isShow: isFilterShow, show: showFilter } = useSwitcher();
 
 const save = () => {
   emit("change", filters);
-  console.log("save");
 };
 const reset = () => {
-  console.log("reset");
+  emit("reset");
 };
 </script>
 

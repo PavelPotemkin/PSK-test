@@ -18,6 +18,20 @@ const leftValue = ref<string>(String(props.min));
 const rightValue = ref<string>(String(props.max));
 
 watch(
+  () => props.min,
+  (value) => {
+    leftValue.value = String(value);
+  }
+);
+
+watch(
+  () => props.max,
+  (value) => {
+    rightValue.value = String(value);
+  }
+);
+
+watch(
   () => leftValue.value,
   (value) => {
     leftValue.value = String(
