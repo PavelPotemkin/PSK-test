@@ -8,12 +8,21 @@ defineProps<{
   };
 }>();
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+
+const onChange = (value: boolean) => {
+  emit("update:modelValue", value);
+};
 </script>
 
 <template>
   <label class="ui-checkbox">
-    <input class="ui-checkbox__input visually-hidden" type="checkbox" />
+    <input
+      class="ui-checkbox__input visually-hidden"
+      type="checkbox"
+      :checked="modelValue"
+      @change="onChange($event.target.checked)"
+    />
 
     <span class="ui-checkbox__box">
       <UiSvgIcon class="ui-checkbox__icon" iconName="check" />
