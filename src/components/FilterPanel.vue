@@ -3,7 +3,7 @@ import { IFiltersTarget } from "@/interfaces/filters.interface";
 import UiCheckbox from "@/ui/fields/UiCheckbox.vue";
 import UiRange from "@/ui/fields/UiRange.vue";
 import UiSwitch from "@/ui/fields/UiSwitch.vue";
-import { computed, reactive, watch } from "vue";
+import { reactive, watch } from "vue";
 import UiModal from "@/ui/UiModal.vue";
 import { useSwitcher } from "@/hooks/useSwitcher";
 import UiButton from "@/ui/UiButton.vue";

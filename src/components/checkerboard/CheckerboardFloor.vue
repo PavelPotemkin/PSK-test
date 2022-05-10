@@ -3,7 +3,7 @@ import { IFloor } from "@/interfaces/floor.interface";
 import CheckerboardFlat from "@/components/checkerboard/CheckerboardFlat.vue";
 import { useStore } from "@/store";
 import { IFlat, IFlatsWithFilter } from "@/interfaces/flats.interface";
-import { ComputedRef, inject, watch } from "vue";
+import { ComputedRef, inject } from "vue";
 import { flatsInjectionSymbol } from "@/lib/injectionSymbols/flat";
 
 defineProps<{
