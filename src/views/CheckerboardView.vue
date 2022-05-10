@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useStore } from "@/store";
 import UiModal from "@/ui/UiModal.vue";
-import { computed, ref } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import UiTooltip from "@/ui/UiTooltip.vue";
 import { ITooltip } from "@/interfaces/tooltip.interface";
 import { IFlatId } from "@/interfaces/flats.interface";
@@ -11,8 +11,10 @@ import UiSvgIcon from "@/ui/UiSvgIcon.vue";
 import { useRouter } from "vue-router";
 import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHousesList.vue";
 import LegendTable from "@/components/LegendTable.vue";
-import UiCheckbox from "@/ui/UiCheckbox.vue";
-import UiSwitch from "@/ui/UiSwitch.vue";
+import UiCheckbox from "@/ui/fields/UiCheckbox.vue";
+import UiSwitch from "@/ui/fields/UiSwitch.vue";
+import UiRange from "@/ui/fields/UiRange.vue";
+import { IRange } from "@/interfaces/fields/range.interface";
 
 const store = useStore();
 const router = useRouter();
@@ -63,6 +65,12 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
   useSwitcher();
 
 const checkbox = ref(false);
+const rangeValues = reactive<IRange>({
+  min: 100,
+  max: 2000,
+});
+const minLimit = 10;
+const maxLimit = 3000;
 </script>
 
 <template>
@@ -70,6 +78,13 @@ const checkbox = ref(false);
     <UiCheckbox v-model="checkbox"> i am checkbox </UiCheckbox>
 
     <UiSwitch v-model="checkbox"> i am switch </UiSwitch>
+
+    <UiRange
+      v-model:min="rangeValues.min"
+      v-model:max="rangeValues.max"
+      :min-limit="minLimit"
+      :max-limit="maxLimit"
+    />
   </div>
 
   <LegendTable />
