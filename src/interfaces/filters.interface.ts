@@ -1,20 +1,24 @@
-import { IHouses } from "@/interfaces/houses.interface";
 import { IFlat } from "@/interfaces/flats.interface";
 
-export interface IFilters {
-  house: IHouses;
-  cost: {
-    min: number;
-    max: number;
-  };
-  square: {
-    min: number;
-    max: number;
-  };
-  status: IFlat["status"][];
-  plan_type: IFlat["plan_type"][];
-  subsidy: IFlat["subsidy"];
-  marginal: IFlat["marginal"];
-  renovation: IFlat["renovation"];
-  installment: IFlat["installment"];
+export type IFilters = IFilter[];
+
+type IFilter = IFilterCheckbox | IFilterRange | IFilterSwitch;
+
+type filterTypes = "range" | "checkbox" | "switch";
+
+interface IFilterBase<T extends filterTypes> {
+  type: T;
+  code: keyof IFlat;
+  name: string;
 }
+
+type IFilterRange = IFilterBase<"range"> & {
+  minLimit: number;
+  maxLimit: number;
+};
+
+type IFilterCheckbox = IFilterBase<"checkbox"> & {
+  items: string[];
+};
+
+type IFilterSwitch = IFilterBase<"switch">;

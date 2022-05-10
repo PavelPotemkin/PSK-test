@@ -7,7 +7,7 @@ export interface IFlats {
 // Брендирование
 export type IFlatId = IBrand<string, "flatId">;
 
-export interface IFlat {
+export interface IFlat<P extends string | null = string | null> {
   id: IFlatId;
   cost: number;
   type: "Нежилые помещения" | "Квартира" | "Паркинг";
@@ -21,7 +21,7 @@ export interface IFlat {
   installment: boolean;
   article: null;
   state: null;
-  plan_type: string | null;
+  plan_type: P;
 }
 
 export type IFlatWithParams = IFlat & {

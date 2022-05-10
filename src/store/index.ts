@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import { IFlatId, IFlats } from "@/interfaces/flats.interface";
+import { IFlat, IFlatId, IFlats } from "@/interfaces/flats.interface";
 import { IHouses } from "@/interfaces/houses.interface";
 import {
-  IGroupedEntrancesAcc,
   IEntrances,
+  IGroupedEntrancesAcc,
 } from "@/interfaces/entrances.interface";
 import { CheckerboardService } from "@/services/checkerboard.service";
 import { ITooltip } from "@/interfaces/tooltip.interface";
@@ -42,8 +42,99 @@ export const useStore = defineStore("main", {
     },
   },
   actions: {
-    async initFilters(data: IFilters) {
-      this.filters = data;
+    setFilters() {
+      const { minSquare, maxSquare, minCost, maxCost, plan_type, status } =
+        Object.values(this.flats).reduce(
+          (acc, flat) => {
+            if (!acc.minSquare || flat.square < acc.minSquare) {
+              acc.minSquare = flat.square;
+            }
+            if (!acc.maxSquare || flat.square > acc.maxSquare) {
+              acc.maxSquare = flat.square;
+            }
+
+            if (!acc.minCost || flat.cost < acc.minCost) {
+              acc.minCost = flat.cost;
+            }
+            if (!acc.maxCost || flat.cost > acc.maxCost) {
+              acc.maxCost = flat.cost;
+            }
+
+            if (flat.plan_type && !acc.plan_type.includes(flat.plan_type)) {
+              acc.plan_type.push(flat.plan_type);
+            }
+
+            if (flat.status && !acc.status.includes(flat.status)) {
+              acc.status.push(flat.status);
+            }
+
+            return acc;
+          },
+          {
+            minSquare: null,
+            maxSquare: null,
+            minCost: null,
+            maxCost: null,
+            plan_type: [],
+            status: [],
+          } as {
+            minSquare: number | null;
+            maxSquare: number | null;
+            minCost: number | null;
+            maxCost: number | null;
+            plan_type: IFlat<string>["plan_type"][];
+            status: IFlat["status"][];
+          }
+        );
+
+      this.filters = [
+        {
+          type: "checkbox",
+          code: "status",
+          name: "Статус:",
+          items: status,
+        },
+        {
+          type: "checkbox",
+          code: "plan_type",
+          name: "Статус:",
+          items: plan_type,
+        },
+        {
+          type: "range",
+          code: "square",
+          name: "Площадь:",
+          minLimit: minSquare as number,
+          maxLimit: maxSquare as number,
+        },
+        {
+          type: "range",
+          code: "cost",
+          name: "Стоимость:",
+          minLimit: minCost as number,
+          maxLimit: maxCost as number,
+        },
+        {
+          type: "switch",
+          code: "subsidy",
+          name: "Субсидированная:",
+        },
+        {
+          type: "switch",
+          code: "marginal",
+          name: "Маржинальная:",
+        },
+        {
+          type: "switch",
+          code: "renovation",
+          name: "С ремонтом:",
+        },
+        {
+          type: "switch",
+          code: "installment",
+          name: "С рассрочкой:",
+        },
+      ];
     },
     async fetchCheckerboard() {
       try {
