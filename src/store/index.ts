@@ -7,6 +7,7 @@ import {
 } from "@/interfaces/entrances.interface";
 import { CheckerboardService } from "@/services/checkerboard.service";
 import { ITooltip } from "@/interfaces/tooltip.interface";
+import { IFilters } from "@/interfaces/filters.interface";
 
 export const useStore = defineStore("main", {
   state: () => {
@@ -16,6 +17,7 @@ export const useStore = defineStore("main", {
       entrances: [] as IEntrances,
       tooltip: {} as ITooltip,
       currentFlatId: null as IFlatId | null,
+      filters: {} as IFilters,
     };
   },
   getters: {
@@ -40,6 +42,9 @@ export const useStore = defineStore("main", {
     },
   },
   actions: {
+    async initFilters(data: IFilters) {
+      this.filters = data;
+    },
     async fetchCheckerboard() {
       try {
         const { flats, houses, entrances } = await CheckerboardService.getAll();

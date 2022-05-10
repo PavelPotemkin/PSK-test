@@ -2,11 +2,11 @@
 import { useSwitcher } from "@/hooks/useSwitcher";
 import UiModal from "@/ui/UiModal.vue";
 import { IFlat, IFlatId } from "@/interfaces/flats.interface";
-import CheckerboardFlat from "@/components/checkerboard/CheckerboardFlat.vue";
 import { useStore } from "@/store";
 import getBooleanValueCorrectText from "@/helpers/getBooleanValueCorrectText";
 import { computed, ref } from "vue";
 import UiLoader from "@/ui/UiLoader.vue";
+import CheckerboardFlatDisplay from "@/components/checkerboard/CheckerboardFlatDisplay.vue";
 
 const { isShow: isLegendShow, show: showLegend } = useSwitcher();
 
@@ -100,9 +100,8 @@ const onLegendShow = () => {
           :key="flatOption"
           class="legend__value"
         >
-          <CheckerboardFlat
+          <CheckerboardFlatDisplay
             class="legend__flat"
-            hide-tooltip
             :flat="{
               ...baseFlat,
               [optionKey]: flatOption,

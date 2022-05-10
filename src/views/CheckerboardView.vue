@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useStore } from "@/store";
 import UiModal from "@/ui/UiModal.vue";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import UiTooltip from "@/ui/UiTooltip.vue";
 import { ITooltip } from "@/interfaces/tooltip.interface";
 import { IFlatId } from "@/interfaces/flats.interface";
@@ -11,6 +11,7 @@ import UiSvgIcon from "@/ui/UiSvgIcon.vue";
 import { useRouter } from "vue-router";
 import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHousesList.vue";
 import LegendTable from "@/components/LegendTable.vue";
+import UiCheckbox from "@/ui/UiCheckbox.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -59,9 +60,15 @@ const { isShow: isShowSuccessCopyModal, show: ShowSuccessCopyModal } =
   useSwitcher();
 const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
   useSwitcher();
+
+const checkbox = ref(false);
 </script>
 
 <template>
+  <div>
+    <UiCheckbox v-model="checkbox" />
+  </div>
+
   <LegendTable />
 
   <CheckerboardHousesList :houses="groupedEntrances" />

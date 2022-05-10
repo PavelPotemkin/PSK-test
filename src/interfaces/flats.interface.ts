@@ -23,3 +23,7 @@ export interface IFlat {
   state: null;
   plan_type: string | null;
 }
+
+export type IFlatWithParams = IFlat & {
+  disabled: boolean;
+};

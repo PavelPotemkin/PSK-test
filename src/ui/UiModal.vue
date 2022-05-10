@@ -3,7 +3,10 @@ import UiSvgIcon from "@/ui/UiSvgIcon.vue";
 import { nextTick, ref, watch } from "vue";
 
 const props = defineProps<{
-  modelValue: boolean;
+  modelValue: {
+    type: boolean;
+    required: true;
+  };
 }>();
 
 const emit = defineEmits(["update:modelValue", "close"]);
