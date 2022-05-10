@@ -24,6 +24,10 @@ export interface IFlat<P extends string | null = string | null> {
   plan_type: P;
 }
 
-export type IFlatWithParams = IFlat & {
-  disabled: boolean;
+export interface IFlatsWithFilter {
+  [key: IFlatId]: IFlatWithFilter;
+}
+
+export type IFlatWithFilter = IFlat & {
+  disabled?: boolean;
 };

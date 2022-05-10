@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useStore } from "@/store";
 import UiModal from "@/ui/UiModal.vue";
-import { computed } from "vue";
+import { computed, ComputedRef, provide } from "vue";
 import UiTooltip from "@/ui/UiTooltip.vue";
 import { ITooltip } from "@/interfaces/tooltip.interface";
-import { IFlatId } from "@/interfaces/flats.interface";
+import { IFlatId, IFlatsWithFilter } from "@/interfaces/flats.interface";
 import FlatDetail from "@/components/FlatDetail.vue";
 import { useSwitcher } from "@/hooks/useSwitcher";
 import UiSvgIcon from "@/ui/UiSvgIcon.vue";
@@ -13,11 +13,10 @@ import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHouses
 import LegendTable from "@/components/LegendTable.vue";
 import { IFiltersTarget } from "@/interfaces/filters.interface";
 import FilterPanel from "@/components/FilterPanel.vue";
+import { flatsInjectionSymbol } from "@/lib/injectionSymbols/flat";
 
 const store = useStore();
 const router = useRouter();
-
-const groupedEntrances = computed(() => store.groupedEntrances);
 
 const selectedFlatId = computed<IFlatId | null>(() => store.currentFlatId);
 const isShowSelectedFlat = computed<boolean>(() => !!store.currentFlatId);
@@ -165,6 +164,85 @@ const onFilterChange = async (value: IFiltersTarget) => {
 const onFilterReset = () => {
   router.push({ path: route.path, query: {} });
 };
+
+const groupedEntrances = computed(() => store.groupedEntrances);
+
+const notEmptyFilters = computed(() =>
+  filters.value.filter((filter) => {
+    switch (filter.type) {
+      case "switch":
+        if (filter.value) {
+          return true;
+        }
+        break;
+      case "range":
+        if (filter.min !== filter.minLimit || filter.max !== filter.maxLimit) {
+          return true;
+        }
+        break;
+      case "checkbox":
+        if (filter.values.length) {
+          return true;
+        }
+        break;
+      default: {
+        // В случае добавления нового типа фильтра тут будет ошибка
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const neverFilter: never = filter;
+        return filter;
+      }
+    }
+
+    return false;
+  })
+);
+
+const filteredFlats = computed<IFlatsWithFilter>(() => {
+  if (!notEmptyFilters.value.length) {
+    return store.flats;
+  }
+
+  const copyFlats = JSON.parse(JSON.stringify(store.flats)) as IFlatsWithFilter;
+
+  for (const copyFlatsKey in copyFlats) {
+    const flat = copyFlats[copyFlatsKey as IFlatId];
+
+    for (const filter of notEmptyFilters.value) {
+      const flatItem = flat[filter.code];
+      if (!flatItem) {
+        break;
+      }
+
+      switch (filter.type) {
+        case "switch":
+          if (!flat[filter.code]) {
+            flat.disabled = true;
+          }
+          break;
+        case "range":
+          if (filter.min > flatItem || filter.max < flatItem) {
+            flat.disabled = true;
+          }
+          break;
+        case "checkbox":
+          if (!filter.values.includes(String(flatItem))) {
+            flat.disabled = true;
+          }
+          break;
+        default: {
+          // В случае добавления нового типа фильтра тут будет ошибка
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const neverFilter: never = filter;
+          return filter;
+        }
+      }
+    }
+  }
+
+  return copyFlats;
+});
+
+provide<ComputedRef<IFlatsWithFilter>>(flatsInjectionSymbol, filteredFlats);
 </script>
 
 <template>

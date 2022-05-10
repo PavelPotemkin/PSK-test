@@ -2,18 +2,21 @@
 import { IFloor } from "@/interfaces/floor.interface";
 import CheckerboardFlat from "@/components/checkerboard/CheckerboardFlat.vue";
 import { useStore } from "@/store";
-import { IFlat } from "@/interfaces/flats.interface";
+import { IFlat, IFlatsWithFilter } from "@/interfaces/flats.interface";
+import { ComputedRef, inject, watch } from "vue";
+import { flatsInjectionSymbol } from "@/lib/injectionSymbols/flat";
 
 defineProps<{
   floor: IFloor;
 }>();
 
 const store = useStore();
-const flats = store.flats;
 
 const openFlat = (flat: IFlat) => {
   store.changeCurrentFlatId(flat.id);
 };
+
+const flats = inject<ComputedRef<IFlatsWithFilter>>(flatsInjectionSymbol);
 </script>
 
 <template>
@@ -23,6 +26,7 @@ const openFlat = (flat: IFlat) => {
       v-for="flat in floor.flats"
       :key="flat.id"
       :flat="flats[flat.id]"
+      :disabled="flats[flat.id].disabled || false"
       @open="openFlat"
     />
   </ul>

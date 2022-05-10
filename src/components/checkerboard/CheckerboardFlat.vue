@@ -56,6 +56,10 @@ const classObj = computed(() => ({
 }));
 
 const emitOpen = () => {
+  if (props.disabled) {
+    return;
+  }
+
   emit("open", props.flat);
 };
 </script>
