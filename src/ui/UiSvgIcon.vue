@@ -13,7 +13,7 @@ const iconPath = icon.url;
 
 <template>
   <svg class="ui-svg-icon" xmlns="http://www.w3.org/2000/svg">
-    <use :href="iconPath" xmlns:xlink="http://www.w3.org/1999/xlink" />
+    <use :href="iconPath" />
   </svg>
 </template>
 
