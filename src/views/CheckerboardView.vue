@@ -12,6 +12,7 @@ import { useRouter } from "vue-router";
 import CheckerboardHousesList from "@/components/checkerboard/CheckerboardHousesList.vue";
 import LegendTable from "@/components/LegendTable.vue";
 import UiCheckbox from "@/ui/UiCheckbox.vue";
+import UiSwitch from "@/ui/UiSwitch.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -66,7 +67,9 @@ const checkbox = ref(false);
 
 <template>
   <div>
-    <UiCheckbox v-model="checkbox" />
+    <UiCheckbox v-model="checkbox"> i am checkbox </UiCheckbox>
+
+    <UiSwitch v-model="checkbox"> i am switch </UiSwitch>
   </div>
 
   <LegendTable />

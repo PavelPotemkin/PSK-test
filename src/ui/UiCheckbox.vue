@@ -29,6 +29,8 @@ defineEmits(["update:modelValue"]);
   align-items: center;
   gap: 0.5em;
   width: fit-content;
+  cursor: pointer;
+  padding: 0.1em 0;
 
   &__icon {
     display: none;
@@ -46,7 +48,7 @@ defineEmits(["update:modelValue"]);
     }
   }
 
-  &__input:focus + .ui-checkbox__box {
+  &__input:focus-visible + .ui-checkbox__box {
     box-shadow: 0 0 0 0.05em darkgrey, 0 0 0 0.05em darkgrey;
   }
 
@@ -60,7 +62,6 @@ defineEmits(["update:modelValue"]);
     background-color: white;
     background-repeat: no-repeat;
     background-position: 50% 50%;
-    cursor: pointer;
   }
 }
 </style>
