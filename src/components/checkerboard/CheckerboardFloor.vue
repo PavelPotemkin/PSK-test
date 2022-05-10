@@ -10,6 +10,8 @@ defineProps<{
   floor: IFloor;
 }>();
 
+const emit = defineEmits(["flatHover", "flatBlur"]);
+
 const store = useStore();
 
 const openFlat = (flat: IFlat) => {
@@ -17,17 +19,27 @@ const openFlat = (flat: IFlat) => {
 };
 
 const flats = inject<ComputedRef<IFlatsWithFilter>>(flatsInjectionSymbol);
+
+const onFlatHover = (index: number) => {
+  emit("flatHover", index);
+};
+
+const onFlatBlur = () => {
+  emit("flatBlur");
+};
 </script>
 
 <template>
   <ul class="floor">
     <CheckerboardFlat
       class="floor__item"
-      v-for="flat in floor.flats"
+      v-for="(flat, index) in floor.flats"
       :key="flat.id"
       :flat="flats[flat.id]"
       :disabled="flats[flat.id].disabled || false"
       @open="openFlat"
+      @mouseenter="!flats[flat.id].disabled ? onFlatHover(index + 1) : null"
+      @mouseleave="onFlatBlur"
     />
   </ul>
 </template>

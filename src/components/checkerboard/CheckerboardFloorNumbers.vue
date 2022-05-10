@@ -21,7 +21,7 @@ defineProps<{
 <style lang="scss">
 .floor-numbers {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-self: start;
   gap: 0.5em;
 }
