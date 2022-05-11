@@ -209,7 +209,7 @@ const filteredFlats = computed<IFlatsWithFilter>(() => {
 
     for (const filter of notEmptyFilters.value) {
       const flatItem = flat[filter.code];
-      if (!flatItem) {
+      if (flatItem === null) {
         break;
       }
 
