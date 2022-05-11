@@ -17,7 +17,7 @@ const iconPath = icon.url;
   </svg>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .ui-svg-icon {
   width: 1em;
   height: 1em;

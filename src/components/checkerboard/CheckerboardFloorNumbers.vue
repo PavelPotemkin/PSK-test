@@ -18,7 +18,7 @@ defineProps<{
   </ul>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .floor-numbers {
   display: flex;
   flex-direction: column-reverse;

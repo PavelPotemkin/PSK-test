@@ -26,9 +26,7 @@ onMounted(async () => {
   </main>
 </template>
 
-<style scoped></style>
-
-<style scoped>
+<style lang="scss" scoped>
 .main {
   max-width: 1440px;
   margin: auto;

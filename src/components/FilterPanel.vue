@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { IFiltersTarget } from "@/interfaces/filters.interface";
 import UiCheckbox from "@/ui/fields/UiCheckbox.vue";
 import UiRange from "@/ui/fields/UiRange.vue";

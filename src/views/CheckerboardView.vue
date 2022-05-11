@@ -297,7 +297,7 @@ provide<ComputedRef<IFlatsWithFilter>>(flatsInjectionSymbol, filteredFlats);
   </UiModal>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .tooltip {
   position: absolute;
   z-index: 999;

@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import UiSvgIcon from "@/ui/UiSvgIcon.vue";
 import { computed } from "vue";
 

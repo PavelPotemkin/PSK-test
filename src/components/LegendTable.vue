@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useSwitcher } from "@/hooks/useSwitcher";
 import UiModal from "@/ui/UiModal.vue";
 import { IFlat, IFlatId } from "@/interfaces/flats.interface";

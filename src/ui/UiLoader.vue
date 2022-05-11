@@ -2,7 +2,7 @@
   <div class="ui-loader"></div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .ui-loader {
   display: inline-block;
   width: 5em;

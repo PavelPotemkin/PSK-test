@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { IRange } from "@/interfaces/fields/range.interface";
 import { ref, watch } from "vue";
 
