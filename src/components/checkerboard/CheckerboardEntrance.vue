@@ -8,12 +8,12 @@ defineProps<{
 }>();
 
 const verticalBgStyleObject = reactive({
-  left: "10px",
+  left: "0",
   opacity: "0",
 });
 
 const horizontalBgStyleObject = reactive({
-  top: "10px",
+  top: "0",
   opacity: "0",
 });
 
@@ -25,7 +25,6 @@ const onFlatHover = (flatNumber: number, reverseFloorNumber: number) => {
 };
 
 const onFlatBlur = () => {
-  console.log("123");
   horizontalBgStyleObject.opacity = "0";
   verticalBgStyleObject.opacity = "0";
 };

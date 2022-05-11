@@ -7,7 +7,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="floor-numbers">
+  <ul class="floor-numbers">
     <CheckerboardCeil
       v-for="i in count"
       :key="i"
@@ -15,7 +15,7 @@ defineProps<{
     >
       <span class="body-1">{{ i }}</span>
     </CheckerboardCeil>
-  </div>
+  </ul>
 </template>
 
 <style lang="scss">
