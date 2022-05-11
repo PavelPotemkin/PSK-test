@@ -1,18 +1,17 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import CheckerboardView from "@/views/CheckerboardView.vue";
+import DetailView from "@/views/DetailView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "home",
-    component: import(
-      /* webpackChunkName: "CheckerboardView" */ "@/views/CheckerboardView.vue"
-    ),
+    component: CheckerboardView,
   },
   {
     path: "/detail/:id",
     name: "detail",
-    component: () =>
-      import(/* webpackChunkName: "about" */ "@/views/DetailView.vue"),
+    component: DetailView,
   },
 ];
 
