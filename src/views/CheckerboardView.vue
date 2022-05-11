@@ -16,6 +16,7 @@ import FilterPanel from "@/components/FilterPanel.vue";
 import { flatsInjectionSymbol } from "@/lib/injectionSymbols/flat";
 
 const store = useStore();
+const route = useRoute();
 const router = useRouter();
 
 const selectedFlatId = computed<IFlatId | null>(() => store.currentFlatId);
@@ -38,7 +39,9 @@ const copyFlatLink = () => {
   }
 
   const url = new URL(
-    `${window.location.origin}/detail/${selectedFlatId.value}`
+    `${window.location.origin}${router.options.history.createHref(
+      `/detail/${selectedFlatId.value}`
+    )}`
   );
 
   navigator.clipboard.writeText(url.href).then(
@@ -61,8 +64,6 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
   useSwitcher();
 
 store.setFilters();
-
-const route = useRoute();
 
 const filters = computed<IFiltersTarget>(() =>
   store.filters.map((filter) => {
