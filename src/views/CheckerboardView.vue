@@ -49,7 +49,6 @@ const copyFlatLink = () => {
     () => ShowErrorCopyModal()
   );
 };
-
 const openInNewPage = () => {
   if (!selectedFlatId.value) {
     return;
@@ -64,7 +63,6 @@ const { isShow: isShowErrorCopyModal, show: ShowErrorCopyModal } =
   useSwitcher();
 
 store.setFilters();
-
 const filters = computed<IFiltersTarget>(() =>
   store.filters.map((filter) => {
     switch (filter.type) {
@@ -161,13 +159,11 @@ const onFilterChange = async (value: IFiltersTarget) => {
   const query = getUrlParamsFromFilter(value);
   await router.push({ path: route.path, query });
 };
-
 const onFilterReset = () => {
   router.push({ path: route.path, query: {} });
 };
 
 const groupedEntrances = computed(() => store.groupedEntrances);
-
 const notEmptyFilters = computed(() =>
   filters.value.filter((filter) => {
     switch (filter.type) {
@@ -197,7 +193,6 @@ const notEmptyFilters = computed(() =>
     return false;
   })
 );
-
 const filteredFlats = computed<IFlatsWithFilter>(() => {
   if (!notEmptyFilters.value.length) {
     return store.flats;
